@@ -12,3 +12,8 @@
 $ brew install yarn
 $ yarn install
 ```
+
+< 開発時 >
+```
+$ yarn gulp
+```
