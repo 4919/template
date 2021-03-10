@@ -3,21 +3,21 @@ var app = new Vue({
     data:{
         mode: 0,
         schoolList: [],
-        schoolGroup: [],
+        schoolGroupList: [],
         targetSchoolList: [],
-        menuGroup:[],
-        selectedSchoolGroup: '',
-        selectedMenuGroup: '',
-        todayMenuList:[]
+        menuGroupList:[],
+        monthlyMenuList:[],
+        targetMenuList:[],
+        targetDate:'',
+        schoolName:''
     },
     created(){
         fetch('./data/school/school.csv')
             .then(res => res.text())
             .then(schoolList => (this.convertSchoolCsvToDictionary(schoolList)));
 
-        // this.checkCookies();
-        this.resetCookies();
-
+        this.checkCookies();
+        // this.resetCookies();
     },
     methods:{
         resetCookies(){
@@ -31,7 +31,10 @@ var app = new Vue({
             this.$cookies.config(60 * 60 * 24 * 30,'');
             if (this.$cookies.isKey('schoolGroup') && this.$cookies.isKey('menuGroup')){
                 this.mode = 2;
+                this.schoolName = this.$cookies.get('schoolName');
+                this.getMenuCsvFile();
             };
+
         },
         convertSchoolCsvToDictionary(str){
 
@@ -47,8 +50,8 @@ var app = new Vue({
                 school.menuGroup = line[1]
                 school.schoolName = line[2]
 
-                if (!(this.schoolGroup.includes(school.schoolGroup) )) {
-                    this.schoolGroup.push(school.schoolGroup);
+                if (!(this.schoolGroupList.includes(school.schoolGroup) )) {
+                    this.schoolGroupList.push(school.schoolGroup);
                 }
                 this.schoolList.push(school);
             }
@@ -71,18 +74,19 @@ var app = new Vue({
         setSchoolCandidateList() {
             console.debug('setSchoolCandidateList() ---->  ');
             this.targetSchoolList = this.schoolList.filter( item => item.schoolGroup === this.$cookies.get('schoolGroup'));
-            let menuGroup = this.targetSchoolList.map(function(row){
+            let menuGroupList = this.targetSchoolList.map(function(row){
                 return row["menuGroup"]
             })
-            this.menuGroup = [...new Set(menuGroup)]
+            this.menuGroupList = [...new Set(menuGroupList)]
             console.debug(this.targetSchoolList)
         },
         setUserSettingsToCookie(schoolName, menuGroup){
             console.debug('setUserSettingsToCookie() ----> ', schoolName, menuGroup);
-            this.$cookies.set('schoolNamep', schoolName);
+            this.$cookies.set('schoolName', schoolName);
             this.$cookies.set('menuGroup', menuGroup);
             this.mode = 2;
 
+            this.schoolName = schoolName;
             this.getMenuCsvFile();
         },
         getMenuCsvFile(){
@@ -103,41 +107,81 @@ var app = new Vue({
                 targetCsv += 'j-';
             }
 
-            targetCsv += 'kondate' + this.getFormatedDate('csv') + '.csv'
+            targetCsv += 'kondate' + this.getFormatedDate(new Date(), 'csv') + '.csv'
+            const url = './data/menu/' + targetCsv;
 
-            // Shift_JISで エンコードする
-            fetch('./data/menu/' + targetCsv)
-                .then(res => {
-                    reader = new FileReader();
-                    reader.readAsBinaryString(res);
-                    reader.onload = function (event) {
-                        let result = event.target.result;
-                        let utf8Array = Encoding.convert(result, 'UTF8', 'SJIS');
-                        result = Encoding.codeToString(utf8Array);
-                        console.log(result); //csvデータ(string)
-                    }
-                });
+            this.getMonthlyMenuList(url);
 
-            // console.debug('', menuList)
         },
-        convertShiftJisToUtf8(res){
-            console.log(res);
-            reader = new FileReader();
-            reader.readAsBinaryString(res);
-            reader.onload = function(event) {
+        stringToArray(str) {
+            var array = [],i,il=str.length;
+            for(i=0;i<il;i++) array.push(str.charCodeAt(i));
+            return array;
+        },
+        getMonthlyMenuList(url){
+            let monthlyMenuList = [];
 
-                var result = event.target.result;
-                var sjisArray = str2Array(result);
-                var uniArray = Encoding.convert(sjisArray, 'UTF8', 'AUTO');
-                var result = Encoding.codeToString(uniArray);
-                console.log(result); //csvデータ(string)
+            axios({
+                url: url,
+                method: 'GET',
+                responseType: 'blob',
+              })
+              .then((response) =>{
+                let reader = new FileReader();
+                reader.readAsBinaryString(new Blob([response.data], {type: 'text/csv'}));
+                reader.onload = function (event) {
+                    const result = event.target.result;
+                    const sjisArray = this.stringToArray(result);
+                    const uniArray = Encoding.convert(sjisArray, {to:'UNICODE', from:'SJIS'});
+                    monthlyMenuList = Encoding.codeToString(uniArray).split('\r\n');
+                    monthlyMenuList.shift();
+                    this.setMonthlyMenuList(monthlyMenuList);
+
+                    let today = this.getFormatedDate(new Date(), 'menu');
+                    this.targetDate = today;
+                    let targetMenu = this.getTargetMenuList(monthlyMenuList, today);
+                    console.debug('Today: ', targetMenu);
+
+                }.bind(this);
+              });
+
+            return this.monthlyMenuList
+        },
+        getTargetMenuList(menuList, date){
+            let targetMenuList = menuList.filter( function(el) {
+                return el.split(',')[0] == date
+            });
+
+            for (let i = 0; i < targetMenuList.length; i++) {
+                let menuLine = targetMenuList[i].split(',');
+                if (!(this.targetMenuList.includes(menuLine[2]))) {
+                    this.targetMenuList.push(menuLine[2]);
+                }
             }
+            
+            return this.targetMenuList
+        },
+        setMonthlyMenuList(menuList){
+            this.monthlyMenuList = menuList;
         }
         ,
-        getFormatedDate(mode){
+        showYesterdayMenu(){
+            let date = this.targetDate;
+            this.targetDate = this.calcFormatedDate(date, -1);
+            this.targetMenuList = [];
+            let targetMenuList = this.getTargetMenuList(this.monthlyMenuList, this.targetDate);
+            console.debug('showYesterdayMenu: ', targetMenuList);
+        }
+        ,showTomorrowMenu(){
+            let date = this.targetDate;
+            this.targetDate = this.calcFormatedDate(date, 1);
+            this.targetMenuList = [];
+            let targetMenuList = this.getTargetMenuList(this.monthlyMenuList, this.targetDate);
+            console.debug('showTomorrowMenu: ', targetMenuList);
+        },
+        getFormatedDate(date, mode){
             // 生駒市が提供しているcsvファイルの命名規則で 年月 が 2021年3月の場合 2103 
             // のように表現されるためそのフォーマットで日付文字列を返す。
-            let date = new Date()
             let formatedStringDate = '';
 
             const year = date.getFullYear().toString();
@@ -154,6 +198,29 @@ var app = new Vue({
                 const day = date.getDate().toString();
                 formatedStringDate = year + '/' + month + '/' + day
             }
+
+            return formatedStringDate
+        },
+        calcFormatedDate(strDate, mode){
+
+            let testDate = new Date();
+
+            let formatedStringDate = '';
+            let date = new Date(strDate);
+            // mode : 
+            // -1: 前日
+            // 1 : 翌日
+            if ( mode == -1 ){
+                let yesterday = new Date(date.setDate(date.getDate() - 1));
+                console.debug(yesterday);
+                formatedStringDate = yesterday.toLocaleDateString();
+            } else if ( mode == 1 ) {
+                let tomorrow = new Date(date.setDate(date.getDate() + 1));
+                console.debug(tomorrow);
+                formatedStringDate = tomorrow.toLocaleDateString();
+            }
+
+            console.debug('calcFormatedDate: ', formatedStringDate);
 
             return formatedStringDate
         }
