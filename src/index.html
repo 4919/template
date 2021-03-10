@@ -13,13 +13,12 @@
 
 <body>
     <div id="app">
-
         <!-- 学校区分を選択する -->
         <div v-show="isSchoolGroupSelectorShown" id="school-group-selector">
             <div>
                 <h1> 学校区分を選択してください。 </h1>
                 <ul>
-                    <button v-for="group in schoolGroup" @click="setSchoolGroup(group)">
+                    <button v-for="group in schoolGroupList" @click="setSchoolGroup(group)">
                         {{ group }}
                     </button>
                 </ul>
@@ -30,8 +29,8 @@
         <div v-show="isMenuGroupSelectorShown" id="menu-group-selector">
             <div>
                 <h1> 学校を選択してください。 </h1>
-
-                <ul v-for="group in menuGroup">
+                
+                <ul v-for="group in menuGroupList">
                     <h2> 献立{{ group }} </h2>
                     <li v-if="school.menuGroup === group" v-for="school in targetSchoolList">
                         <button @click="setUserSettingsToCookie(school.schoolName, group)">
@@ -45,17 +44,19 @@
 
         <!-- メニューを表示 -->
         <div v-show="isDailyMenuShown" id="daily-menu">
-            <h1> 本日の献立 </h1>
-                <ul>
+            <h3> 献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
+            <h2> {{targetDate}}の給食献立 </h2>
+            <button @click="showYesterdayMenu"> << </button>
+                <ul v-for="menu in targetMenuList">
                     <li>
-                        
+                        {{menu}}
                     </li>
                 </ul>
+            <button @click="showTomorrowMenu"> >> </button>
         </div>
-
     </div>
 
-    <script src="./js/school.js"></script>
+    <script src="./js/main.js"></script>
     <!-- <script src="./js/menu.js"></script> -->
 </body>
 
