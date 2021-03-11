@@ -1,77 +1,85 @@
+<!DOCTYPE html>
 <html>
 <header>
-<meta charset="utf-8" />
-<title>4919.jp</title>
-<link rel="stylesheet" href="./css/style.css">
+  <meta charset="utf-8">
+  <title>4919.jp</title>
+  <link rel="stylesheet" href="./css/style.css">
 </header>
-
 <body>
-    <div id="app" class="main">
-        <transition name="splash" appear>
-            <!-- スプラッシュスクリーン -->
-            <div v-show="isSplashScreenShown" class="page splash-screen">
-                <div class="wrapper">
-                    <h1>4919.jp</h1>
-                    <footer>
-                        <span>v{{ version }}</span>
-                        <small>supported by MisekataLab</small>
-                    </footer>
-                </div>
-            </div>
-        </transition>
-        <transition name="slide">
-            <!-- 学校区分を選択する -->
-            <div v-show="isSchoolGroupSelectorShown" class="page group-selector school-group-selector">
-                <div class="wrapper">
-                    <h1>学校区分を選択してください</h1>
-                    <ul>
-                        <li v-for="group in schoolGroupList" @click="setSchoolGroup(group)">
-                            {{ group }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </transition>
-        <transition name="slide">
-            <!-- メニュー区分を選択する -->
-            <div v-show="isMenuGroupSelectorShown" class="page group-selector menu-group-selector">
-                <div class="wrapper">
-                    <h1>学校を選択してください</h1>
-                    <div v-for="group in menuGroupList">
-                        <h2>献立{{ group }}</h2>
-                        <ul>
-                            <li v-if="school.menuGroup === group" v-for="school in targetSchoolList" @click="setUserSettingsToCookie(school.schoolName, group)">
-                                {{ school.schoolName }}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </transition>
-        <transition name="slide">
-            <!-- メニューを表示 -->
-            <div v-show="isDailyMenuShown" class="page daily-menu">
-                <div class="wrapper">
-                    <h3> 献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
-                    <h2> {{targetDate}}の給食献立 </h2>
-                    <div @click="showYesterdayMenu">«</div>
-                    <div @click="showTomorrowMenu">»</div>
-                    <ul v-for="menu in targetMenuList">
-                        <li>
-                            {{menu}}
-                        </li>
-                    </ul>
-                    <div @click="resetCookies()">remove cookies</div>
-                </div>
-            </div>
-        </transition>
+<div id="app" class="main">
+  <transition name="splash" appear>
+    <!-- スプラッシュスクリーン -->
+    <div v-show="isSplashScreenShown" class="page splash-screen">
+      <div class="wrapper">
+        <h1>4919.jp</h1>
+        <footer>
+          <span>v{{ version }}</span>
+          <small>supported by MisekataLab</small>
+        </footer>
+      </div>
     </div>
-</body>
+  </transition>
+  <transition name="slide">
+    <!-- 学校区分を選択する -->
+    <div v-show="isSchoolGroupSelectorShown" class="page group-selector school-group-selector">
+      <div class="wrapper">
+        <h1>学校区分を選択してください</h1>
+        <ul>
+          <li v-for="group in schoolGroupList" @click="setSchoolGroup(group)">
+            {{ group }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </transition>
+  <transition name="slide">
+    <!-- メニュー区分を選択する -->
+    <div v-show="isMenuGroupSelectorShown" class="page group-selector menu-group-selector">
+      <div class="wrapper">
+        <h1>学校を選択してください</h1>
+        <div v-for="group in menuGroupList">
+          <h2>献立{{ group }}</h2>
+          <ul>
+            <li v-if="school.menuGroup === group" v-for="school in targetSchoolList" @click="setUserSettingsToCookie(school.schoolName, group)">
+              {{ school.schoolName }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </transition>
+  <transition name="slide">
+    <!-- メニューを表示 -->
+    <div v-show="isDailyMenuShown" class="page daily-menu">
+      <div class="wrapper">
+        <h3>献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
+        <div class="daily-menu-blackboard">
+          <div class="wrapper">
+            <div class="daily-menu-controller clearfix">
+              <span @click="showYesterdayMenu">«</span>
+              <h2>{{ targetDate }}</h2>
+              <span @click="showTomorrowMenu">»</span>
+            </div>
+            <ul class="daily-menu-list">
+              <li v-for="menu in targetMenuList">
+                  {{menu}}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="daily-menu-table">
+            
+        </div>
+        <div @click="resetCookies()">remove cookies</div>
+      </div>
+    </div>
+  </transition>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 <script src="https://unpkg.com/vue-cookies@1.7.4/vue-cookies.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/1.0.30/encoding.js"></script>
 <script src="./js/main.js"></script>
-<!-- <script src="./js/menu.js"></script> -->
+</body>
 </html>
