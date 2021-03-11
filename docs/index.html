@@ -25,9 +25,9 @@
                 <div class="wrapper">
                     <h1>学校区分を選択してください。</h1>
                     <ul>
-                        <li v-for="group in schoolGroupList" @click="setSchoolGroup(group)">
+                        <p v-for="group in schoolGroupList" @click="setSchoolGroup(group)">
                             {{ group }}
-                        </li>
+                        </p>
                     </ul>
                 </div>
             </div>
@@ -41,11 +41,9 @@
                     <div v-for="group in menuGroupList">
                         <h2>献立{{ group }}</h2>
                         <ul>
-                            <li v-if="school.menuGroup === group" v-for="school in targetSchoolList">
-                                <button @click="setUserSettingsToCookie(school.schoolName, group)">
+                            <p v-if="school.menuGroup === group" v-for="school in targetSchoolList"  @click="setUserSettingsToCookie(school.schoolName, group)">
                                     {{ school.schoolName }}
-                                </button>
-                            </li>
+                            </p>
                         </ul>
                     </div>
                 </div>
@@ -58,11 +56,15 @@
                     <h3> 献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
                     <h2> {{targetDate}}の給食献立 </h2>
                     <button @click="showYesterdayMenu"> << </button>
-                        <ul v-for="menu in targetMenuList">
-                            <li>
-                                {{menu}}
-                            </li>
+                        <ul v-for="menuItem in targetMenuList">
+                            <p @click="getMenuIngredient(menuItem)">
+                                {{menuItem}}
+                            </p>
                         </ul>
+                        <div v-if="targetMenuList.length !== 0">
+                            <span> エネルギ: {{energy}} kcal </span>
+                            <span> タンパク質: {{protein}} g </span>
+                        </div>  
                     <button @click="showTomorrowMenu"> >> </button>
                     <div @click="resetCookies()">remove cookies</div>
                 </div>
