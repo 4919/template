@@ -110,6 +110,9 @@ div.main {
   & > .wrapper {
     background: url("../img/bg_classroom.png") center center;
     background-size: auto 100%;
+    h3 {
+      padding: 15px 0 5px;
+    }
     .daily-menu-blackboard {
       position: relative;
       color: white;
@@ -134,6 +137,7 @@ div.main {
         height: auto;
         width: calc(100% + 60px);
         margin: 0 -30px;
+        padding: 0 72px;
         background: url("../img/bg_blackboard_body.png") center center repeat-y;
         background-size: 90% auto;
       }
@@ -150,7 +154,6 @@ div.main {
       }
       .daily-menu-controller {
         line-height: 36px;
-        padding: 0 72px;
         span {
           width: 36px;
           height: 36px;
@@ -166,9 +169,16 @@ div.main {
         }
       }
       ul.daily-menu-list {
-        padding: 0 0 20px;
+        padding: 0;
         li {
           list-style: none;
+          cursor: pointer;
+        }
+      }
+      div.daily-menu-nutrition {
+        padding: 0 0 20px;
+        span {
+          display: inline-block;
         }
       }
     }
