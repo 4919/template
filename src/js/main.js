@@ -169,16 +169,15 @@ var app = new Vue({
         },
         setMonthlyMenuList(menuList){
             this.monthlyMenuList = menuList;
-        }
-        ,
+        },
         showYesterdayMenu(){
             let date = this.targetDate;
             this.targetDate = this.calcFormatedDate(date, -1);
             this.targetMenuList = [];
             let targetMenuList = this.getTargetMenuList(this.monthlyMenuList, this.targetDate);
             console.debug('showYesterdayMenu: ', targetMenuList);
-        }
-        ,showTomorrowMenu(){
+        },
+        showTomorrowMenu(){
             let date = this.targetDate;
             this.targetDate = this.calcFormatedDate(date, 1);
             this.targetMenuList = [];
@@ -208,24 +207,15 @@ var app = new Vue({
             return formatedStringDate
         },
         calcFormatedDate(strDate, mode){
-
-            let testDate = new Date();
-
-            let formatedStringDate = '';
+            // mode: -1=前日, 1=翌日
             let date = new Date(strDate);
-            // mode : 
-            // -1: 前日
-            // 1 : 翌日
-            if ( mode == -1 ){
-                let yesterday = new Date(date.setDate(date.getDate() - 1));
-                console.debug(yesterday);
-                formatedStringDate = yesterday.toLocaleDateString();
-            } else if ( mode == 1 ) {
-                let tomorrow = new Date(date.setDate(date.getDate() + 1));
-                console.debug(tomorrow);
-                formatedStringDate = tomorrow.toLocaleDateString();
-            }
+            let newDate = new Date(date.setDate(date.getDate() + mode));
+            console.debug(newDate);
 
+            let year = date.getFullYear().toString();
+            let month = (date.getMonth() + 1).toString();
+            let day = date.getDate().toString();
+            let formatedStringDate = year + '/' + month + '/' + day;
             console.debug('calcFormatedDate: ', formatedStringDate);
 
             return formatedStringDate
