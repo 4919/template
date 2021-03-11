@@ -67,6 +67,12 @@
                         </div>  
                     <button @click="showTomorrowMenu"> >> </button>
                     <div @click="resetCookies()">remove cookies</div>
+
+                    
+                    <div v-if="ingredientList.length !== 0">
+                        <h4>※ デバッグ用</h4>
+                        <p v-for="ingredient in ingredientList"> {{ingredient}} </p>
+                    </div>
                 </div>
             </div>
         </transition>
