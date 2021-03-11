@@ -248,7 +248,7 @@ var app = new Vue({
             for (let i=0; i < menuList.length; i++){
                 ingredientList.push(menuList[i].split(',')[3])
             }
-
+            
             this.ingredientList = ingredientList;
         },
         getMenuImage(menu){
