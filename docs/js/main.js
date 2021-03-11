@@ -6,14 +6,15 @@ var app = new Vue({
         schoolList: [],
         schoolGroupList: [],
         targetSchoolList: [],
-        menuGroupList:[],
-        monthlyMenuList:[],
-        targetMenuList:[],
-        ingredientList:[],
-        targetDate:'',
-        schoolName:'',
-        energy:'',
-        protein:'',
+        menuGroupList: [],
+        monthlyMenuList: [],
+        targetMenuList: [],
+        clickedMenu: '',
+        ingredientList: [],
+        targetDate: '',
+        schoolName: '',
+        energy: '',
+        protein: '',
     },
     created(){
         fetch('./data/school/school.csv')
@@ -241,44 +242,54 @@ var app = new Vue({
                 ingredientList.push(menuList[i].split(',')[3])
             }
             
+            this.clickedMenu = menu;
             this.ingredientList = ingredientList;
+        },
+        closeIngredientList() {
+            this.clickedMenu = "";
+            this.ingredientList = [];
         },
         getMenuImage(menu){
             // 献立
-            const regexp = new RegExp(menu);
             let image = '';
 
-            if (regexp.test('ごはん')){
-                iamge = 'food_rice.png'
-            } else if (regexp.test('牛乳') || regexp.test('ぎゅうにゅう') ){
-                image = 'food_milk.png'
-            } else if (regexp.test('コロッケ') || regexp.test('からあげ')){
-                image = 'food_croquette.png'
-            } else if (regexp.test('あげ')){
-                image = 'food_fried.png'
-            } else if (regexp.test('パン')){
-                image = 'food_bread.png'
-            } else if (regexp.test('ナン')){
-                image = 'food_nan.png'
-            } else if (regexp.test('うどん') || regexp.test('めん') || regexp.test('麺')){
-                image = 'food_noodle.png'
-            } else if (regexp.test('さば') || regexp.test('タラ') || regexp.test('さば') || regexp.test('さわら')){
-                image = 'food_fish.png'
-            } else if (regexp.test('みそしる') || regexp.test('じる')){
-                image = 'food_misosoup.png'
-            } else if (regexp.test('スープ')){
-                image = 'food_soup.png'
-            } else if (regexp.test('ソテー') || regexp.test('あえ')  || regexp.test('おひたし') || regexp.test('サラダ')){
-                image = 'food_kobachi.png'
-            } else if (regexp.test('いため') || regexp.test('やさい')){
-                image = 'food_vegetables.png'
-            } else if (regexp.test('ゼリー')){
-                image = 'food_jelly.png'
-            } else if (regexp.test('フルーツ')){
-                image = 'food_fruits.png'
+            if (menu.includes('ごはん')){
+                image = 'food_rice'
+            } else if (menu.includes('牛乳') || menu.includes('ぎゅうにゅう') ){
+                image = 'food_milk'
+            } else if (menu.includes('コロッケ') || menu.includes('からあげ')){
+                image = 'food_croquette'
+            } else if (menu.includes('あげ')){
+                image = 'food_fried'
+            } else if (menu.includes('パン')){
+                image = 'food_bread'
+            } else if (menu.includes('ナン')){
+                image = 'food_nan'
+            } else if (menu.includes('うどん') || menu.includes('めん') || menu.includes('麺')){
+                image = 'food_noodle'
+            } else if (menu.includes('さば') || menu.includes('タラ') || menu.includes('さば') || menu.includes('さわら')){
+                image = 'food_fish'
+            } else if (menu.includes('みそしる') || menu.includes('じる')){
+                image = 'food_misosoup'
+            } else if (menu.includes('スープ')){
+                image = 'food_soup'
+            } else if (menu.includes('ソテー') || menu.includes('あえ')  || menu.includes('おひたし') || menu.includes('サラダ')){
+                image = 'food_kobachi'
+            } else if (menu.includes('いため') || menu.includes('やさい')){
+                image = 'food_vegetables'
+            } else if (menu.includes('ゼリー')){
+                image = 'food_jelly'
+            } else if (menu.includes('フルーツ')){
+                image = 'food_fruits'
+            } else {
+                image = 'food_rice'
             }
             
-            return image
+            return image;
+        },
+        getMenuImageURL(menu) {
+            let image = this.getMenuImage(menu);
+            return "img/" + image + ".png";
         }
     },
     computed: {
@@ -293,6 +304,9 @@ var app = new Vue({
         },
         isDailyMenuShown: function() {
             return this.mode == 2;
+        },
+        isIngredientListShown: function() {
+            return this.ingredientList.length !== 0;
         }
     }
 });

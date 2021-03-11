@@ -51,7 +51,7 @@
   <transition name="slide">
     <!-- メニューを表示 -->
     <div v-show="isDailyMenuShown" class="page daily-menu">
-      <div class="wrapper">
+      <div class="wrapper" :class="{blur: isIngredientListShown}">
         <h3>献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
         <div class="daily-menu-blackboard">
           <div class="wrapper">
@@ -73,15 +73,24 @@
         </div>
         <div class="daily-menu-table">
           <div class="wrapper">
-            
+            <img :src="getMenuImageURL(menuItem)" v-for="menuItem in targetMenuList" :alt="menuItem">
           </div>
-        </div>
-        <div class="daily-menu-ingredient" v-if="ingredientList.length !== 0">
-          <h4>※ デバッグ用</h4>
-          <p v-for="ingredient in ingredientList"> {{ingredient}} </p>
         </div>
         <div @click="resetCookies()">remove cookies</div>
       </div>
+      <transition name="ingredient">
+        <div class="daily-menu-ingredient" v-if="isIngredientListShown">
+          <div class="wrapper">
+            <div class="clipboard">
+              <h4>{{ clickedMenu }}</h4>
+              <ul>
+                <li v-for="ingredient in ingredientList"> {{ingredient}} </li>
+              </ul>
+            </div>
+            <span class="close-ingredient-list" @click="closeIngredientList">× 閉じる</span>
+          </div>
+        </div>
+      </transition>
     </div>
   </transition>
 </div>

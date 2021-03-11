@@ -27,8 +27,11 @@ html, body {
   opacity: 0;
 }
 
-.slide-leave-to {
-  transform: translateX(-100vw);
+.ingredient-enter-active, .ingredient-leave-active {
+  transition: all 0.5s ease;
+}
+.ingredient-enter, .ingredient-leave-to {
+  transform: translateY(100vh);
 }
 
 
@@ -115,6 +118,10 @@ div.main {
     min-width: 300px;
     background: url("../img/bg_classroom.png") center center;
     background-size: auto 100%;
+    transition: filter 0.5s ease;
+    &.blur {
+      filter: blur(5px);
+    }
     h3 {
       padding: 15px 0 5px;
     }
@@ -202,6 +209,64 @@ div.main {
         width: 100%;
         background: url("../img/bg_table_with_tray.png") top center no-repeat;
         background-size: 100% auto;
+      }
+    }
+  }
+  .daily-menu-ingredient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    height: 100vh;
+    width: 100vw;
+    text-align: center;
+    & > .wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      background: url("../img/bg_clipboard.png") top left no-repeat;
+      background-size: 100% auto;
+      &:before {
+        content: "";
+        display: block;
+        padding-top: 135%;
+      }
+      .clipboard {
+        position: absolute;
+        top: 8%;
+        bottom: 21%;
+        left: 15%;
+        right: 15%;
+        padding: 20px 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        ul {
+          padding: 0;
+          li {
+            list-style: none;
+          }
+        }
+      }
+      .close-ingredient-list {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        z-index: 110;
+        padding: 8px;
+        width: 100px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0.8;
+        border-radius: 20px;
+        cursor: pointer;
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
