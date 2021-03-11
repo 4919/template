@@ -18,6 +18,9 @@ var app = new Vue({
             .then(schoolList => (this.convertSchoolCsvToDictionary(schoolList)));
 
         this.checkCookies();
+        // this.resetCookies();
+
+        console.log(this.getMenuImage('パン'));
     },
     methods:{
         resetCookies(){
