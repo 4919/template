@@ -1,7 +1,8 @@
 var app = new Vue({
     el: '#app',
     data:{
-        mode: 0,
+        version: "0.0",
+        mode: -1,
         schoolList: [],
         schoolGroupList: [],
         targetSchoolList: [],
@@ -21,20 +22,25 @@ var app = new Vue({
     },
     methods:{
         resetCookies(){
+            console.debug('resetCookies() ---->')
             console.debug(this.$cookies.keys());
-            for ( key in this.$cookies.keys()){
-                this.$cookies.remove(key);
-            }
+            this.$cookies.keys().forEach(cookie => {
+                this.$cookies.remove(cookie);
+                location.reload();
+            });
         },
         checkCookies(){
-            console.debug('checkCookies() ---->  ');
-            this.$cookies.config(60 * 60 * 24 * 30,'');
-            if (this.$cookies.isKey('schoolGroup') && this.$cookies.isKey('menuGroup')){
-                this.mode = 2;
-                this.schoolName = this.$cookies.get('schoolName');
-                this.getMenuCsvFile();
-            };
-
+            console.debug('checkCookies() ---->');
+            this.$cookies.config(60 * 60 * 24 * 30, '');
+            setTimeout(function() {
+                if(this.$cookies.isKey('schoolGroup') && this.$cookies.isKey('menuGroup')) {
+                    this.mode = 2;
+                    this.schoolName = this.$cookies.get('schoolName');
+                    this.getMenuCsvFile();
+                } else {
+                    this.mode = 0;
+                }
+            }.bind(this), 1000);
         },
         convertSchoolCsvToDictionary(str){
 
@@ -226,6 +232,9 @@ var app = new Vue({
         }
     },
     computed: {
+        isSplashScreenShown: function() {
+            return this.mode == -1;
+        },
         isSchoolGroupSelectorShown: function() {
             return this.mode == 0;
         },
