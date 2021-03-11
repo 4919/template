@@ -28,7 +28,7 @@ html, body {
 }
 
 .slide-leave-to {
-  transform: translateX(100vw);
+  transform: translateX(-100vw);
 }
 
 
@@ -107,7 +107,12 @@ div.main {
 }
 
 .daily-menu {
+  overflow-y: auto;
+  overflow-x: hidden;
   & > .wrapper {
+    position: relative;
+    min-height: 650px;
+    min-width: 300px;
     background: url("../img/bg_classroom.png") center center;
     background-size: auto 100%;
     h3 {
@@ -180,6 +185,23 @@ div.main {
         span {
           display: inline-block;
         }
+      }
+    }
+    .daily-menu-table {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 90%;
+      max-width: 360px;
+      height: 50%;
+      max-height: 300px;
+      margin: 0 auto;
+      & > .wrapper {
+        height: 100%;
+        width: 100%;
+        background: url("../img/bg_table_with_tray.png") top center no-repeat;
+        background-size: 100% auto;
       }
     }
   }
