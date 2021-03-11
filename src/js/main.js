@@ -228,6 +228,40 @@ var app = new Vue({
             console.debug('calcFormatedDate: ', formatedStringDate);
 
             return formatedStringDate
+        },
+        getMenuImage(str){
+            const regexp = new RegExp(str);
+            let image = '';
+
+            if (regexp.test('ごはん')){
+                iamge = 'food_rice.png'
+            } else if (regexp.test('牛乳') || regexp.test('ぎゅうにゅう') ){
+                image = 'food_milk.png'
+            } else if (regexp.test('コロッケ') || regexp.test('からあげ')){
+                image = 'food_croquette.png'
+            } else if (regexp.test('あげ')){
+                image = 'food_fried.png'
+            } else if (regexp.test('パン')){
+                image = 'food_bread.png'
+            } else if (regexp.test('ナン')){
+                image = 'food_nan.png'
+            } else if (regexp.test('うどん') || regexp.test('めん') || regexp.test('麺')){
+                image = 'food_noodle.png'
+            } else if (regexp.test('さば') || regexp.test('タラ') || regexp.test('さば') || regexp.test('さわら')){
+                image = 'food_fish.png'
+            } else if (regexp.test('みそしる') || regexp.test('じる')){
+                image = 'food_misosoup.png'
+            } else if (regexp.test('スープ')){
+                image = 'food_soup.png'
+            } else if (regexp.test('ソテー') || regexp.test('あえ')  || regexp.test('おひたし') || regexp.test('サラダ')){
+                image = 'food_kobachi.png'
+            } else if (regexp.test('いため') || regexp.test('やさい')){
+                image = 'food_vegetables.png'
+            } else if (regexp.test('ゼリー')){
+                image = 'food_jelly.png'
+            } else if (regexp.test('フルーツ')){
+                image = 'food_fruits.png'
+            } 
         }
     },
     computed: {
