@@ -21,9 +21,9 @@
         </transition>
         <transition name="slide">
             <!-- 学校区分を選択する -->
-            <div v-show="isSchoolGroupSelectorShown" class="page school-group-selector">
+            <div v-show="isSchoolGroupSelectorShown" class="page group-selector school-group-selector">
                 <div class="wrapper">
-                    <h1>学校区分を選択してください。</h1>
+                    <h1>学校区分を選択してください</h1>
                     <ul>
                         <li v-for="group in schoolGroupList" @click="setSchoolGroup(group)">
                             {{ group }}
@@ -34,17 +34,14 @@
         </transition>
         <transition name="slide">
             <!-- メニュー区分を選択する -->
-            <div v-show="isMenuGroupSelectorShown" class="page menu-group-selector">
+            <div v-show="isMenuGroupSelectorShown" class="page group-selector menu-group-selector">
                 <div class="wrapper">
-                    <h1>学校を選択してください。</h1>
-                    
+                    <h1>学校を選択してください</h1>
                     <div v-for="group in menuGroupList">
                         <h2>献立{{ group }}</h2>
                         <ul>
-                            <li v-if="school.menuGroup === group" v-for="school in targetSchoolList">
-                                <button @click="setUserSettingsToCookie(school.schoolName, group)">
-                                    {{ school.schoolName }}
-                                </button>
+                            <li v-if="school.menuGroup === group" v-for="school in targetSchoolList" @click="setUserSettingsToCookie(school.schoolName, group)">
+                                {{ school.schoolName }}
                             </li>
                         </ul>
                     </div>
@@ -57,13 +54,13 @@
                 <div class="wrapper">
                     <h3> 献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
                     <h2> {{targetDate}}の給食献立 </h2>
-                    <button @click="showYesterdayMenu"> << </button>
-                        <ul v-for="menu in targetMenuList">
-                            <li>
-                                {{menu}}
-                            </li>
-                        </ul>
-                    <button @click="showTomorrowMenu"> >> </button>
+                    <div @click="showYesterdayMenu">«</div>
+                    <div @click="showTomorrowMenu">»</div>
+                    <ul v-for="menu in targetMenuList">
+                        <li>
+                            {{menu}}
+                        </li>
+                    </ul>
                     <div @click="resetCookies()">remove cookies</div>
                 </div>
             </div>

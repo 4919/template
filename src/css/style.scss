@@ -69,7 +69,37 @@ div.main {
   }
 }
 
-
+.group-selector {
+  height: 100%;
+  overflow-y: auto;
+  h1 {
+    font-size: 1.2em;
+    padding: 20px;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1.0em;
+    padding: 10px 20px;
+  }
+  ul {
+    margin: 0;
+    padding: 0 0 50px;
+    li {
+      margin: 0;
+      list-style: none;
+      border: 1px solid #ddd;
+      border-width: 0 0 1px;
+      padding: 15px;
+      cursor: pointer;
+      &:first-child {
+        border-width: 1px 0;
+      }
+      &:hover {
+        background: #e8e5d4;
+      }
+    }
+  }
+}
 
 
 
