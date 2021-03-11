@@ -150,6 +150,7 @@ div.main {
         width: calc(100% + 60px);
         margin: 0 -30px;
         padding: 0 72px;
+        min-height: 200px;
         background: url("../img/bg_blackboard_body.png") center center repeat-y;
         background-size: 90% auto;
       }
@@ -171,8 +172,10 @@ div.main {
           height: 36px;
           float: left;
           cursor: pointer;
+          font-size: 1.5em;
+          opacity: 0.7;
           &:hover {
-            opacity: 0.7;
+            opacity: 1;
           }
         }
         h2 {
@@ -209,6 +212,14 @@ div.main {
         width: 100%;
         background: url("../img/bg_table_with_tray.png") top center no-repeat;
         background-size: 100% auto;
+        text-align: center;
+        padding: 20px 40px;
+        img {
+          width: 33%;
+          height: auto;
+          display: inline-block;
+          margin: -10px 0;
+        }
       }
     }
   }
