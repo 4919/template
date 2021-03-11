@@ -18,7 +18,6 @@ var app = new Vue({
             .then(schoolList => (this.convertSchoolCsvToDictionary(schoolList)));
 
         this.checkCookies();
-        // this.resetCookies();
     },
     methods:{
         resetCookies(){
@@ -116,6 +115,7 @@ var app = new Vue({
             targetCsv += 'kondate' + this.getFormatedDate(new Date(), 'csv') + '.csv'
             const url = './data/menu/' + targetCsv;
 
+            console.debug(url);
             this.getMonthlyMenuList(url);
 
         },
@@ -139,8 +139,9 @@ var app = new Vue({
                     const result = event.target.result;
                     const sjisArray = this.stringToArray(result);
                     const uniArray = Encoding.convert(sjisArray, {to:'UNICODE', from:'SJIS'});
-                    monthlyMenuList = Encoding.codeToString(uniArray).split('\r\n');
+                    monthlyMenuList = Encoding.codeToString(uniArray).replace(/\"/g, "").split('\r\n');
                     monthlyMenuList.shift();
+                    console.debug('MonthlyMenuList: ', monthlyMenuList);
                     this.setMonthlyMenuList(monthlyMenuList);
 
                     let today = this.getFormatedDate(new Date(), 'menu');
@@ -208,9 +209,7 @@ var app = new Vue({
             return formatedStringDate
         },
         calcFormatedDate(strDate, mode){
-
-            let testDate = new Date();
-
+            
             let formatedStringDate = '';
             let date = new Date(strDate);
             // mode : 
