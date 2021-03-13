@@ -257,7 +257,9 @@ var app = new Vue({
                 image = 'food_rice'
             } else if (menu.includes('牛乳') || menu.includes('ぎゅうにゅう') ){
                 image = 'food_milk'
-            } else if (menu.includes('コロッケ') || menu.includes('からあげ')){
+            } else if (menu.includes('からあげ')){
+                image = 'food_karaage'
+            } else if (menu.includes('コロッケ')){
                 image = 'food_croquette'
             } else if (menu.includes('あげ')){
                 image = 'food_fried'
@@ -271,12 +273,20 @@ var app = new Vue({
                 image = 'food_fish'
             } else if (menu.includes('みそしる') || menu.includes('じる')){
                 image = 'food_misosoup'
+            } else if (menu.includes('シチュー')){
+                image = 'food_creamstew'
+            } else if (menu.includes('すきに')){
+                image = 'food_nikomi'
             } else if (menu.includes('スープ')){
                 image = 'food_soup'
             } else if (menu.includes('ソテー') || menu.includes('あえ')  || menu.includes('おひたし') || menu.includes('サラダ')){
                 image = 'food_kobachi'
             } else if (menu.includes('いため') || menu.includes('やさい')){
                 image = 'food_vegetables'
+            } else if (menu.includes('フランクフルト')){
+                image = 'food_sausage'
+            } else if (menu.includes('とりにく')){
+                image = 'food_chicken'
             } else if (menu.includes('ゼリー')){
                 image = 'food_jelly'
             } else if (menu.includes('フルーツ')){
