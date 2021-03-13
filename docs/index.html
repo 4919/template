@@ -5,6 +5,7 @@
   <title>4919.jp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
 <div id="app" class="main">
@@ -53,7 +54,10 @@
     <!-- メニューを表示 -->
     <div v-show="isDailyMenuShown" class="page daily-menu">
       <div class="wrapper" :class="{blur: isIngredientListShown}">
-        <h3>献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
+        <header>
+          <div class="right-menu"><span class="material-icons" @click="resetCookies()">logout</span></div>
+          <h3>献立{{$cookies.get('menuGroup')}}: {{schoolName}}</h3>
+        </header>
         <div class="daily-menu-blackboard">
           <div class="wrapper">
             <div class="daily-menu-controller clearfix">
@@ -61,15 +65,18 @@
               <h2>{{ targetDate }}</h2>
               <span @click="showTomorrowMenu">»</span>
             </div>
-            <ul class="daily-menu-list">
-              <li v-for="menuItem in targetMenuList" @click="getMenuIngredient(menuItem)">
-                  {{ menuItem }}
-              </li>
-            </ul>
-            <div class="daily-menu-nutrition" v-if="targetMenuList.length !== 0">
-              <span>エネルギ： {{ energy }} kcal</span>
-              <span>タンパク質： {{ protein }} g</span>
+            <div v-if="targetMenuList.length > 0">
+              <ul class="daily-menu-list">
+                <li v-for="menuItem in targetMenuList" @click="getMenuIngredient(menuItem)">
+                    {{ menuItem }}
+                </li>
+              </ul>
+              <div class="daily-menu-nutrition">
+                <span>エネルギ： {{ energy }} kcal</span>
+                <span>タンパク質： {{ protein }} g</span>
+              </div>
             </div>
+            <div v-else class="no-menu-message"><span class="material-icons">sentiment_dissatisfied</span>今日は給食がないみたい！</div>
           </div>
         </div>
         <div class="daily-menu-table">
@@ -77,7 +84,6 @@
             <img :src="getMenuImageURL(menuItem)" v-for="menuItem in targetMenuList" :alt="menuItem">
           </div>
         </div>
-        <div @click="resetCookies()">remove cookies</div>
       </div>
       <transition name="ingredient">
         <div class="daily-menu-ingredient" v-if="isIngredientListShown">
