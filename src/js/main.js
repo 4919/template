@@ -17,13 +17,25 @@ var app = new Vue({
         protein: '',
     },
     created(){
-        fetch('./data/school/school.csv')
-            .then(res => res.text())
-            .then(schoolList => (this.convertSchoolCsvToDictionary(schoolList)));
-
+        // 日付を今日に指定
+        this.setDateToday()
+        // 学校データの取得
+        this.getSchools()
+        // クッキーの確認、メニューデータの取得
         this.checkCookies();
     },
     methods:{
+        setDateToday(){
+            const today = this.getFormatedDate(new Date(), 'menu');
+            this.targetDate = today;
+        },
+
+        getSchools(){
+            fetch('./data/school/school.csv')
+            .then(res => res.text())
+            .then(schoolList => (this.convertSchoolCsvToDictionary(schoolList)));
+        },
+
         resetCookies(){
             console.debug('resetCookies() ---->')
             console.debug(this.$cookies.keys());
@@ -148,9 +160,7 @@ var app = new Vue({
                     console.debug('MonthlyMenuList: ', monthlyMenuList);
                     this.setMonthlyMenuList(monthlyMenuList);
 
-                    let today = this.getFormatedDate(new Date(), 'menu');
-                    this.targetDate = today;
-                    let targetMenu = this.getTargetMenuList(monthlyMenuList, today);
+                    let targetMenu = this.getTargetMenuList(monthlyMenuList, this.targetDate);
                     console.debug('Today: ', targetMenu);
 
                 }.bind(this);
