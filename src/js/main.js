@@ -124,13 +124,10 @@ var app = new Vue({
             //      ・献立は１種類のみ
             let targetCsv = '';
 
-            if (this.$cookies.get('schoolGroup') == '小学校') {
-                targetCsv += ('e' + this.$cookies.get('menuGroup').toLowerCase() + '-');
-            }else {
-                targetCsv += 'j-';
-            }
+            targetCsv = this.schoolList.find(
+                (school) => {return school.schoolName === this.$cookies.get('schoolName')}
+            ).menuCsvFile
             
-            targetCsv += 'kondate' + this.getFormatedDate(new Date(), 'csv') + '.csv'
             const url = './data/menu/' + targetCsv;
 
             console.debug(url);
