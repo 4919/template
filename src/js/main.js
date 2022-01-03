@@ -67,9 +67,11 @@ var app = new Vue({
                 line = lines[i].split(',');
 
                 let school = {}
-                school.schoolGroup = line[0]
-                school.menuGroup = line[1]
-                school.schoolName = line[2]
+                school.schoolPrefectures = line[0]
+                school.schoolMunicipalities = line[1]
+                school.schoolGroup = line[2]
+                school.schoolName = line[3]
+                school.menuCsvFile = line[4]
 
                 if (!(this.schoolGroupList.includes(school.schoolGroup) )) {
                     this.schoolGroupList.push(school.schoolGroup);
@@ -122,13 +124,10 @@ var app = new Vue({
             //      ・献立は１種類のみ
             let targetCsv = '';
 
-            if (this.$cookies.get('schoolGroup') == '小学校') {
-                targetCsv += ('e' + this.$cookies.get('menuGroup').toLowerCase() + '-');
-            }else {
-                targetCsv += 'j-';
-            }
+            targetCsv = this.schoolList.find(
+                (school) => {return school.schoolName === this.$cookies.get('schoolName')}
+            ).menuCsvFile
 
-            targetCsv += 'kondate' + this.getFormatedDate(new Date(), 'csv') + '.csv'
             const url = './data/menu/' + targetCsv;
 
             console.debug(url);
@@ -153,8 +152,8 @@ var app = new Vue({
                 reader.readAsBinaryString(new Blob([response.data], {type: 'text/csv'}));
                 reader.onload = function (event) {
                     const result = event.target.result;
-                    const sjisArray = this.stringToArray(result);
-                    const uniArray = Encoding.convert(sjisArray, {to:'UNICODE', from:'SJIS'});
+                    const utf8Array = this.stringToArray(result);
+                    const uniArray = Encoding.convert(utf8Array, {to:'UNICODE', from:'UTF-8'});
                     monthlyMenuList = Encoding.codeToString(uniArray).replace(/\"/g, "").split('\r\n');
                     monthlyMenuList.shift();
                     console.debug('MonthlyMenuList: ', monthlyMenuList);
@@ -220,7 +219,7 @@ var app = new Vue({
                 formatedStringDate = (year.slice(2,4) + month)
             } else if (mode == 'menu'){
                 const day = date.getDate().toString();
-                formatedStringDate = year + '/' + month + '/' + day
+                formatedStringDate = year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2)
             }
 
             return formatedStringDate
@@ -234,7 +233,7 @@ var app = new Vue({
             let year = date.getFullYear().toString();
             let month = (date.getMonth() + 1).toString();
             let day = date.getDate().toString();
-            let formatedStringDate = year + '/' + month + '/' + day;
+            let formatedStringDate =  year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2);
             console.debug('calcFormatedDate: ', formatedStringDate);
 
             return formatedStringDate
