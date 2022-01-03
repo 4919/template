@@ -219,7 +219,7 @@ var app = new Vue({
                 formatedStringDate = (year.slice(2,4) + month)
             } else if (mode == 'menu'){
                 const day = date.getDate().toString();
-                formatedStringDate = year + '/' + month + '/' + day
+                formatedStringDate = year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2)
             }
 
             return formatedStringDate
@@ -233,7 +233,7 @@ var app = new Vue({
             let year = date.getFullYear().toString();
             let month = (date.getMonth() + 1).toString();
             let day = date.getDate().toString();
-            let formatedStringDate = year + '/' + month + '/' + day;
+            let formatedStringDate =  year + '-' + ('00' + month).slice(-2) + '-' + ('00' + day).slice(-2);
             console.debug('calcFormatedDate: ', formatedStringDate);
 
             return formatedStringDate
