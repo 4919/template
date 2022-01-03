@@ -127,7 +127,7 @@ var app = new Vue({
             targetCsv = this.schoolList.find(
                 (school) => {return school.schoolName === this.$cookies.get('schoolName')}
             ).menuCsvFile
-            
+
             const url = './data/menu/' + targetCsv;
 
             console.debug(url);
@@ -152,8 +152,8 @@ var app = new Vue({
                 reader.readAsBinaryString(new Blob([response.data], {type: 'text/csv'}));
                 reader.onload = function (event) {
                     const result = event.target.result;
-                    const sjisArray = this.stringToArray(result);
-                    const uniArray = Encoding.convert(sjisArray, {to:'UNICODE', from:'SJIS'});
+                    const utf8Array = this.stringToArray(result);
+                    const uniArray = Encoding.convert(utf8Array, {to:'UNICODE', from:'UTF-8'});
                     monthlyMenuList = Encoding.codeToString(uniArray).replace(/\"/g, "").split('\r\n');
                     monthlyMenuList.shift();
                     console.debug('MonthlyMenuList: ', monthlyMenuList);
