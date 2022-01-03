@@ -67,9 +67,11 @@ var app = new Vue({
                 line = lines[i].split(',');
 
                 let school = {}
-                school.schoolGroup = line[0]
-                school.menuGroup = line[1]
-                school.schoolName = line[2]
+                school.schoolPrefectures = line[0]
+                school.schoolMunicipalities = line[1]
+                school.schoolGroup = line[2]
+                school.schoolName = line[3]
+                school.menuCsvFile = line[4]
 
                 if (!(this.schoolGroupList.includes(school.schoolGroup) )) {
                     this.schoolGroupList.push(school.schoolGroup);
@@ -127,7 +129,7 @@ var app = new Vue({
             }else {
                 targetCsv += 'j-';
             }
-
+            
             targetCsv += 'kondate' + this.getFormatedDate(new Date(), 'csv') + '.csv'
             const url = './data/menu/' + targetCsv;
 
